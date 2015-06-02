@@ -1,0 +1,47 @@
+#' Change file names on text files
+#'
+#' The \code{order.files} function renames the .txt-files in the specified directory by adding two zeroes to single digits and one zero to double digit numbers within file names.
+#'
+#'
+#' @param path character vector or string specifying the path to rename files from
+#'
+#' @return Returns logical values, where TRUE means that the file(s) were successfully renamed, or FALSE if not.
+#'
+#'
+#' @examples
+#' order.files("~Storting/storting1899/Text/")
+#'
+#' @export
+#'
+
+order.files<-function(path){
+  files<-list.files(path, pattern=".txt")
+  filesnew<-as.numeric(na.omit(as.numeric(unlist(strsplit(unlist(files), "[^0-9]+")))))
+  filesnew<-ifelse(nchar(as.character(filesnew))==1, paste0("00", as.character(filesnew)), filesnew)
+  filesnew<-ifelse(nchar(as.character(filesnew))==2, paste0("0", as.character(filesnew)), filesnew)
+  filesnew<-paste0(substring(files, 1, 1), filesnew, ".txt")
+
+  filesnew<-paste0(path, filesnew)
+  files<-paste0(path, files)
+  file.rename(files, filesnew)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
