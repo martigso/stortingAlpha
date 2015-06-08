@@ -13,7 +13,8 @@ order.files(path)
 Returns logical values, where TRUE means that the file(s) were successfully renamed, or FALSE if not.
 }
 \description{
-The \code{order.files} function renames the .txt-files in the specified directory by adding two zeroes to single digits and one zero to double digit numbers within file names.
+The \code{order.files} function renames the .txt-files in the specified directory by adding two zeroes to single
+digits and one zero to double digit numbers within file names.
 }
 \examples{
 order.files("~Storting/storting1899/Text/")
