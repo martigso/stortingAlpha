@@ -3,9 +3,9 @@
 #' The \code{order.files} function renames the .txt-files in the specified directory by adding two zeroes to single digits and one zero to double digit numbers within file names.
 #'
 #'
-#' @param path character vector or string specifying the path to rename files from
+#' @param path character vector or string specifying the path to rename files from (remember to include two backslashes or one slash, depending on which you use, at the end of the string).
 #'
-#' @return Returns logical values, where TRUE means that the file(s) were successfully renamed, or FALSE if not.
+#' @return Either returs a statement of success, or a warning when it fails.
 #'
 #'
 #' @examples
@@ -23,7 +23,13 @@ order.files<-function(path){
 
   filesnew<-paste0(path, filesnew)
   files<-paste0(path, files)
-  file.rename(files, filesnew)
+  doneLogic<-file.rename(files, filesnew)
+  if (all(doneLogic)==TRUE){
+    return("File names changed")
+  } else {
+    stop("Something went wrong! Did you remember to add '\\\\' or '/' at the end of the path string?")
+  }
+
 }
 
 

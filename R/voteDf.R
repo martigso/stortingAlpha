@@ -1,4 +1,4 @@
-#' Return hazard ration from Cox PH model
+#' Return a data frame of vote types based on text file
 #'
 #' A function to transform text into units of voteinfo
 #'
