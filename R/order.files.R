@@ -1,6 +1,7 @@
 #' Change file names on text files
 #'
-#' The \code{order.files} function renames the .txt-files in the specified directory by adding two zeroes to single digits and one zero to double digit numbers within file names.
+#' The \code{order.files} function renames the .txt-files in the specified directory by adding two zeroes to single
+#' digits and one zero to double digit numbers within file names.
 #'
 #'
 #' @param path character vector or string specifying the path to rename files from (remember to include two backslashes or one slash, depending on which you use, at the end of the string).
