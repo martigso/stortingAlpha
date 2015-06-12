@@ -16,8 +16,8 @@
 #' @export
 #'
 votedf<-function(pattern, txtvector){
-  tempdf<-data.frame(cbind(vote=as.list(unlist(strapply(txtvector, pattern))),
-                           text=substring(as.list(unlist(strsplit(txtvector, pattern))))[-1], 1, 500))
+  tempdf<-data.frame(cbind(vote=unlist(strapply(txtvector, pattern)),
+                           text=unlist(substring(as.list(unlist(strsplit(txtvector, pattern)))[-1], 1, 500))))
 
   tempdf$enstem<-ifelse(grepl("enstemmig", tempdf$text)==TRUE, 1, 0)
   tempdf$motstem<-ifelse(grepl("mot [[:digit:]]", tempdf$text)==TRUE | grepl("mod [[:digit:]]", tempdf$text)==TRUE |
@@ -29,4 +29,3 @@ votedf<-function(pattern, txtvector){
   tempdf
 
 }
-text=substring(as.list(unlist(strsplit("txtvector", "x")))[-1], 1, 200)

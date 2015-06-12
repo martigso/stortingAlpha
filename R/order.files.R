@@ -16,11 +16,17 @@
 #'
 
 order.files<-function(path){
+  options(error=NULL)
   files<-list.files(path, pattern=".txt")
   filesnew<-as.numeric(na.omit(as.numeric(unlist(strsplit(unlist(files), "[^0-9]+")))))
-  filesnew<-ifelse(nchar(as.character(filesnew))==1, paste0("00", as.character(filesnew)), filesnew)
-  filesnew<-ifelse(nchar(as.character(filesnew))==2, paste0("0", as.character(filesnew)), filesnew)
-  filesnew<-paste0(substring(files, 1, 1), filesnew, ".txt")
+
+  if(any(nchar(files)!=8)){
+    filesnew<-ifelse(nchar(as.character(filesnew))==1, paste0("00", as.character(filesnew)), filesnew)
+    filesnew<-ifelse(nchar(as.character(filesnew))==2, paste0("0", as.character(filesnew)), filesnew)
+    filesnew<-paste0(substring(files, 1, 1), filesnew, ".txt")
+    } else {
+      stop("Files are missing or already renamed")
+      }
 
   filesnew<-paste0(path, filesnew)
   files<-paste0(path, files)
