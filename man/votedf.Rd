@@ -2,7 +2,7 @@
 % Please edit documentation in R/voteDf.R
 \name{votedf}
 \alias{votedf}
-\title{Return hazard ration from Cox PH model}
+\title{Return a data frame of vote types based on text file}
 \usage{
 votedf(pattern, txtvector)
 }

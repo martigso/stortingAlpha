@@ -7,10 +7,10 @@
 order.files(path)
 }
 \arguments{
-\item{path}{character vector or string specifying the path to rename files from}
+\item{path}{character vector or string specifying the path to rename files from (remember to include two backslashes or one slash, depending on which you use, at the end of the string).}
 }
 \value{
-Returns logical values, where TRUE means that the file(s) were successfully renamed, or FALSE if not.
+Either returs a statement of success, or a warning when it fails.
 }
 \description{
 The \code{order.files} function renames the .txt-files in the specified directory by adding two zeroes to single
