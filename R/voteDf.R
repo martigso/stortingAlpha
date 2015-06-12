@@ -17,13 +17,14 @@
 #'
 votedf<-function(pattern, txtvector){
   tempdf<-data.frame(cbind(vote=as.list(unlist(strapply(txtvector, pattern))),
-                           text=substring(as.list(unlist(strsplit(txtvector, pattern))))[-1], 1, 200))
+                           text=substring(as.list(unlist(strsplit(txtvector, pattern))))[-1], 1, 500))
 
   tempdf$enstem<-ifelse(grepl("enstemmig", tempdf$text)==TRUE, 1, 0)
   tempdf$motstem<-ifelse(grepl("mot [[:digit:]]", tempdf$text)==TRUE | grepl("mod [[:digit:]]", tempdf$text)==TRUE |
                            grepl("mot[[:digit:]]", tempdf$text)==TRUE | grepl("mod[[:digit:]]", tempdf$text)==TRUE,
                          1,0)
-  tempdf$rollcall<-ifelse(grepl("nanveopprop", tempdf$text)==TRUE | grepl("navneopraab", tempdf$text)==TRUE, 1,0)
+  tempdf$rollcall<-ifelse(grepl("nanveopprop", tempdf$text)==TRUE | grepl("navneopraab", tempdf$text)==TRUE |
+                            grepl("de [[:digit:]] herrer", tempdf$text)==TRUE | grepl("De [[:digit:]] herrer", tempdf$text)==TRUE, 1,0)
 
   tempdf
 
