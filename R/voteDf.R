@@ -20,7 +20,7 @@ votedf<-function(pattern, txtvector){
                            text=unlist(substring(as.list(unlist(strsplit(txtvector, pattern)))[-1], 1, 500))))
 
   tempdf$enstem<-ifelse(grepl("enstemmig", tempdf$text)==TRUE, 1, 0)
-  tempdf$motstem<-ifelse(grepl("mot [[:digit:]]", tempdf$text)==TRUE | grepl("mod [[:digit:]]", tempdf$text)==TRUE |
+  tempdf$motstem<-ifelse(grepl("mot [[:digit:]]", tempdf$text)==TRUE | grepl("mod [[:digit:]]" | grepl("Mod [[:digit:]]"), tempdf$text)==TRUE |
                            grepl("mot[[:digit:]]", tempdf$text)==TRUE | grepl("mod[[:digit:]]", tempdf$text)==TRUE,
                          1,0)
   tempdf$rollcall<-ifelse(grepl("nanveopprop", tempdf$text)==TRUE | grepl("navneopraab", tempdf$text)==TRUE |
