@@ -4,7 +4,7 @@
 \alias{order.files}
 \title{Change file names on text files}
 \usage{
-order.files(path)
+order.files(path, overwrite = TRUE)
 }
 \arguments{
 \item{path}{character vector or string specifying the path to rename files from (remember to include two backslashes or one slash, depending on which you use, at the end of the string).}

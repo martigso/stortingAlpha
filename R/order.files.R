@@ -15,14 +15,16 @@
 #' @export
 #'
 
-order.files<-function(path){
+order.files<-function(path, overwrite=TRUE){
   options(error=NULL)
   files<-list.files(path, pattern=".txt")
   filesnew<-as.numeric(na.omit(as.numeric(unlist(strsplit(unlist(files), "[^0-9]+")))))
 
-  if(all(nchar(files)==8) | any(grepl("s1*", files))){
-    stop("Files are missing or already renamed")
-    } else {
+  if(overwrite==FALSE & all(nchar(files)==8) | any(nchar(files))==9){
+    stop("Overwrite set to false, and the files are missing, already renamed, or a full text document is already made.")
+  }
+
+  if(overwrite==TRUE | overwrite==FALSE & length(files)>0){
       filesnew<-ifelse(nchar(as.character(filesnew))==1, paste0("00", as.character(filesnew)), filesnew)
       filesnew<-ifelse(nchar(as.character(filesnew))==2, paste0("0", as.character(filesnew)), filesnew)
       filesnew<-paste0(substring(files, 1, 1), filesnew, ".txt")
@@ -31,6 +33,7 @@ order.files<-function(path){
   filesnew<-paste0(path, filesnew)
   files<-paste0(path, files)
   doneLogic<-file.rename(files, filesnew)
+
   if (all(doneLogic)==TRUE){
     return("File names changed")
   } else {
