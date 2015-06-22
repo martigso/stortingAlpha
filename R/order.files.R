@@ -21,7 +21,8 @@ order.files<-function(path, overwrite=TRUE){
   filesnew<-as.numeric(na.omit(as.numeric(unlist(strsplit(unlist(files), "[^0-9]+")))))
 
   if(overwrite==FALSE & all(nchar(files)==8) | any(nchar(files))==9){
-    stop("Overwrite set to false, and the files are missing, already renamed, or a full text document is already made.")
+    stop("Overwrite set to false, and the files are missing, already renamed,
+         a full text document is already made, or the directory does not exist")
   }
 
   if(overwrite==TRUE | overwrite==FALSE & length(files)>0){

@@ -4,7 +4,7 @@
 \alias{votedf}
 \title{Return a data frame of vote types based on text file}
 \usage{
-votedf(pattern, txtvector)
+votedf(pattern, txtvector, strlength = 500)
 }
 \arguments{
 \item{pattern}{Regex pattern to split the text file on}

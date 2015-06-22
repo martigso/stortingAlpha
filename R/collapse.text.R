@@ -30,7 +30,7 @@ collapse.text<-function(path, overwrite=TRUE){
   if(paste0("s", year, ".txt") %in% list.files(path)==TRUE & overwrite==FALSE){
     stop("Overwrite is set to false, and there is already a full text file in the directory.")
     } else {
-      shell(shQuote(paste0("copy *.txt ", "s", year, ".txt")))
+      shell(shQuote(paste0("copy /Y *.txt ", "s", year, ".txt")))
     }
   return(paste0("The file s", year, ".txt was successfully made in ", path, "."))
   }

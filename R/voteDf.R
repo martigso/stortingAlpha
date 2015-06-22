@@ -15,16 +15,25 @@
 #'
 #' @export
 #'
-votedf<-function(pattern, txtvector){
+votedf<-function(pattern, txtvector, strlength = 500){
   tempdf<-data.frame(cbind(vote=unlist(strapply(txtvector, pattern)),
-                           text=unlist(substring(as.list(unlist(strsplit(txtvector, pattern)))[-1], 1, 500))))
+                           text=unlist(substring(as.list(unlist(strsplit(txtvector, pattern)))[-1], 1, strlength))))
 
-  tempdf$enstem<-ifelse(grepl("enstemmig", tempdf$text)==TRUE, 1, 0)
-  tempdf$motstem<-ifelse(grepl("mot [[:digit:]]", tempdf$text)==TRUE | grepl("mod [[:digit:]]" | grepl("Mod [[:digit:]]"), tempdf$text)==TRUE |
-                           grepl("mot[[:digit:]]", tempdf$text)==TRUE | grepl("mod[[:digit:]]", tempdf$text)==TRUE,
+  tempdf$enstem<-ifelse(grepl("enstemmig", tempdf$text)==TRUE | grepl("enst.", tempdf$text)==TRUE, 1, 0)
+
+  tempdf$motstem<-ifelse(grepl("m[[:alpha:]]d [[:digit:]]", tempdf$text) | grepl("m[[:alpha:]]d[[:digit:]]", tempdf$text)==TRUE |
+                           grepl("M[[:alpha:]]d [[:digit:]]", tempdf$text)==TRUE | grepl("M[[:alpha:]]d[[:digit:]]", tempdf$text)==TRUE |
+                           grepl("[[:alpha:]]lternativ votering", tempdf$text)==TRUE | grepl("[[:alpha:]]kkebifaldt", tempdf$text)==TRUE |
+                           grepl("[[:alpha:]]kke bifaldt", tempdf$text)==TRUE,
                          1,0)
+#  [[:alpha:]]ed [0-9]{1,2} stemmer |
+#    [[:alpha:]]od [0-9]{1,2} stemmer |
+
+    tempdf$motstem<-ifelse(tempdf$motstem==1 & grepl("de [0-9]{1,2} herrer", tempdf$text)==TRUE |
+                           grepl("De [0-9]{1,2} herrer", tempdf$text)==TRUE, 0, tempdf$motstem)
+
   tempdf$rollcall<-ifelse(grepl("nanveopprop", tempdf$text)==TRUE | grepl("navneopraab", tempdf$text)==TRUE |
-                            grepl("de [[:digit:]] herrer", tempdf$text)==TRUE | grepl("De [[:digit:]] herrer", tempdf$text)==TRUE, 1,0)
+                            grepl("de [0-9]{1,2} herrer", tempdf$text)==TRUE | grepl("De [0-9]{1,2} herrer", tempdf$text)==TRUE, 1,0)
 
   tempdf
 

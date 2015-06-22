@@ -22,6 +22,9 @@ mend.text<-function(path){
   path<-getwd()
   year<-as.numeric(na.omit(as.numeric(unlist(strsplit(path, "[^0-9]+")))))
   textfile<-readLines(paste0("s", year, ".txt"), encoding="UTF-8")
+
+  textfile<-gsub("-$", "", textfile)
+
   textfile<-paste(textfile, collapse="")
 
   # Strings of common misreadings to loop over
@@ -47,6 +50,14 @@ mend.text<-function(path){
              V o t e r in g :|V oter ing:"
 
   textfile<-gsub(strings, "Votering:", textfile)
+
+  strings<-"Enstemmig|en-stemmig|cnstennnig|onsteimni|existemmig|eirstemmig|
+            nstemmig|ersstemtnig|Smithsstemmig|on-stemmig|en-sternmig|
+            estemmig|onstonnnig|Enst.:|bifaldtes e-nst.|ensleirinnig|
+            enlstemmig|enetetnznig|e11stem111ig|ei1sten1i;nig|entemmig|
+            censlennnig"
+
+  textfile<-gsub(strings, "enstemmig", textfile)
 
 return(textfile)
 
