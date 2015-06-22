@@ -13,10 +13,13 @@
 #'
 #' @seealso \code{\link{order.files}}, \code{\link{votedf}}
 #'
+#' @examples
+#' collapse.text("~Storting/storting1899/")
+#'
 #' @export
 #'
 
-collapse.text<-function(path, overwrite=TRUE, out_path){
+collapse.text<-function(path, overwrite=TRUE){
   options(error=NULL)
 
   if(Sys.info()[1]!="Windows"){
@@ -30,7 +33,7 @@ collapse.text<-function(path, overwrite=TRUE, out_path){
   if(paste0("s", year, ".txt") %in% list.files(path)==TRUE & overwrite==FALSE){
     stop("Overwrite is set to false, and there is already a full text file in the directory.")
     } else {
-      shell(shQuote(paste0("copy *.txt ", "s", year, ".txt", "desination ", out_path)))
+      shell(shQuote(paste0("copy *.txt ", "s", year, ".txt")))
     }
   return(paste0("The file s", year, ".txt was successfully made in ", path, "."))
   }

@@ -21,6 +21,9 @@ vote occurances using \code{\link{gsub}}, and splits the document into a data fr
 using \code{\link{strapply}} from the \emph{gsubfn} package. It is important to run both
 \code{\link{order.files}} and \code{\link{collapse.text}} before running this command.
 }
+\examples{
+text <- mend.text("~Storting/storting1899/")
+}
 \seealso{
 \code{\link{order.files}}, \code{\link{votedf}}, \code{\link{collapse.text}}
 }

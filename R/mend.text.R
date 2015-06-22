@@ -13,11 +13,14 @@
 #'
 #' @seealso \code{\link{order.files}}, \code{\link{votedf}}, \code{\link{collapse.text}}
 #'
+#' @examples
+#' text <- mend.text("~Storting/storting1899/")
 #'
 #' @export
 #'
 
 mend.text<-function(path){
+  options(error=NULL)
   setwd(path)
   path<-getwd()
   year<-as.numeric(na.omit(as.numeric(unlist(strsplit(path, "[^0-9]+")))))
@@ -33,7 +36,7 @@ mend.text<-function(path){
              V 0 t e r in g :|V 0 t e ri n g:|V o t e ri n g:|V o t e ri n g :|
              V 0 t eir i n g :|Voterintg:|Votoring;|Voterin g:|V o t e. r i n g :|
              V o terinlg:|Voteringf|Voteri ng:|Votejring:|V 0|teri ngt|
-             V 0 t de ri n g:|Vetering:|Voteiringz|Votüring:|Voteringzl|
+             V 0 t de ri n g:|Vetering:|Voteiringz|Voteringzl|
              V 0 t e r i n g z|Voteriing:|v otering:|V 0 te ri n g:|V otering:|
              Vo,tering:|Vptering:|Vrotering:|V 0 t e  i n g:|V o tje r i n g:|
              Vjoterimg:|V o te r i n g :|V ote ring:|V o te ri n g:|V0te:ring:|
@@ -47,7 +50,7 @@ mend.text<-function(path){
              Voteriiig:|Voteringr|V oteri n g:|Voteri n g:|Vcjtering:|Voterjng:|
              Voterirxg:|Votoring:|Volering:|V0 tu r i .n g:|Voterinv:|
              V 0 t e r i n g;|V 0 t e r i 11 g:|V 0 t e r i n g r|Vxitering:|
-             V o t e r in g :|V oter ing:"
+             V o t e r in g :|V oter ing:|Voteringe|Voteri-ng:|Voterfing:"
 
   textfile<-gsub(strings, "Votering:", textfile)
 
@@ -55,7 +58,8 @@ mend.text<-function(path){
             nstemmig|ersstemtnig|Smithsstemmig|on-stemmig|en-sternmig|
             estemmig|onstonnnig|Enst.:|bifaldtes e-nst.|ensleirinnig|
             enlstemmig|enetetnznig|e11stem111ig|ei1sten1i;nig|entemmig|
-            censlennnig"
+            censlennnig|onst.|enslonnmig|twist|Entemmig|euistennnig|
+            ennstennmig|entem mig|ennstemnrig"
 
   textfile<-gsub(strings, "enstemmig", textfile)
 

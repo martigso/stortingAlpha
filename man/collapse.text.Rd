@@ -4,7 +4,7 @@
 \alias{collapse.text}
 \title{Construct text document on single page text files}
 \usage{
-collapse.text(path, overwrite = TRUE, out_path)
+collapse.text(path, overwrite = TRUE)
 }
 \arguments{
 \item{path}{String specifying the directory containing the single page text files}
@@ -21,6 +21,9 @@ A function to collapse single page text files into one text file using a combina
 It is important to make sure that the files are propperly arranged using the \code{\link{order.files}}
 command before running \emph{collapse.text}.
 Only works on Windows OS for the time being.
+}
+\examples{
+collapse.text("~Storting/storting1899/")
 }
 \seealso{
 \code{\link{order.files}}, \code{\link{votedf}}

@@ -38,7 +38,8 @@ order.files<-function(path, overwrite=TRUE){
   if (all(doneLogic)==TRUE){
     return("File names changed")
   } else {
-    stop("Something went wrong! Did you remember to add '\\\\' or '/' at the end of the path string?")
+    stop("Something went wrong! Did you remember to add '\\\\' or '/' at the end of the path string?
+         Else, make sure directory name is correctly specified.")
   }
 
 }

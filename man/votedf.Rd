@@ -4,12 +4,15 @@
 \alias{votedf}
 \title{Return a data frame of vote types based on text file}
 \usage{
-votedf(pattern, txtvector, strlength = 500)
+votedf(pattern, txtvector, strlength = 200)
 }
 \arguments{
 \item{pattern}{Regex pattern to split the text file on}
 
-\item{txtvector}{the text file to make into a data frame}
+\item{txtvector}{Vector of text to make into a data frame. Should be stored by the \code{\link{mend.text}} function.}
+
+\item{strlength}{Integer indicating how much of the string after each vote should be kept. With rollcalls it is
+seldom enough with under 1000}
 }
 \value{
 Returns a dataframe with vote info on the specified text file
@@ -17,8 +20,15 @@ Returns a dataframe with vote info on the specified text file
 \description{
 A function to transform text into units of voteinfo
 }
+\details{
+If a C stack usage error occurs, this is often a consequence of infinite loops caused by wrongly specified pattern argument.
+Check whether the pattern argument is correctly specified.
+}
 \examples{
-data<-voteDf("Votering[[:punct:]]", alltext)
+order.files("~Storting/storting1899")
+collapse.text("~Storting/storting1899")
+s1899text <- mend.text("~Storting/storting1899/")
+s1899df <- voteDf("Votering[[:punct:]]", s1899text, 500)
 }
 \seealso{
 \code{\link{percincrease}}
