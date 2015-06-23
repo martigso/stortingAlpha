@@ -17,6 +17,11 @@
 
 order.files<-function(path, overwrite=TRUE){
   options(error=NULL)
+
+  if(Sys.info()[1]!="Windows"){
+    stop("This command only works on Windows OS")
+  }
+
   files<-list.files(path, pattern=".txt")
   filesnew<-as.numeric(na.omit(as.numeric(unlist(strsplit(unlist(files), "[^0-9]+")))))
 
