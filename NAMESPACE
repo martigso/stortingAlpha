@@ -3,4 +3,5 @@
 export(collapse.text)
 export(mend.text)
 export(order.files)
+export(parl.questions)
 export(votedf)
