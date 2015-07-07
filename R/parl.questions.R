@@ -49,8 +49,8 @@ parl.questions<-function(url, nPages){
   tempDate <- na.omit(htmlTree4[sapply(htmlTree4, function(x) grep("Bortfaller|Besvart:|Sp[[:alpha:]]rsm[[:alpha:]]let er trukket", x)==1)==TRUE])
   tempDate <- strapply(tempDate, "[0-9]{1,2}\\D[0-9]{1,2}\\D[0-9]{1,4}")
 
-  tempTo <- na.omit(htmlTree4[sapply(htmlTree4, function(x) grep("Bortfaller|Besvart:|Sp[[:alpha:]]rsm[[:alpha:]]let er trukket", x)==1)==TRUE])
-  tempTo <- unlist(strsplit(tempTo, "^.*?minister |^.*?EU "))
+  tempAnswBy <- na.omit(htmlTree4[sapply(htmlTree4, function(x) grep("Bortfaller|Besvart:|Sp[[:alpha:]]rsm[[:alpha:]]let er trukket", x)==1)==TRUE])
+  tempAnswBy <- unlist(strsplit(tempAnswBy, "^.*?minister |^.*?EU "))
 
 
   temp<-data.frame(dateAsked = as.Date(gsub("Datert: ", "",
@@ -61,8 +61,8 @@ parl.questions<-function(url, nPages){
                    type = unlist(strapply(htmlTree3,
                                           "Sp[[:alpha:]]rretimesp[[:alpha:]]rsm[[:alpha:]]l|Muntlig sp[[:alpha:]]rsm[[:alpha:]]l|Sp[[:alpha:]]rsm[[:alpha:]]l ved m[[:alpha:]]tets slutt|Sp[[:alpha:]]rsm[[:alpha:]]l til presidentskapet|Fra representanten")),
                    from = gsub(" \\(.*?$", "" , gsub("^.*?fra ", "", htmlTree3)),
-                   to = tempTo[which(nchar(tempTo)>0)],
-                   toDep = gsub("^.*?til ", "", htmlTree3),
+                   answBy = tempAnswBy[which(nchar(tempAnswBy)>0)],
+                   toDepMinister = gsub("^.*?til ", "", htmlTree3),
                    question = gsub("^\\r\\n[[:space:]]+|[[:space:]]+$", "", lapply(htmlTree["//div[@class='listitem-text']"], xmlValue)),
                    fromParty = gsub("\\).*?$", "" , gsub("^.*?\\(", "", htmlTree3)))
 
