@@ -22,7 +22,7 @@
 \url{https://www.stortinget.no/no/Saker-og-publikasjoner/Sporsmal/Sporretimesporsmal/}
 }
 \usage{
-questAll
+data("questAll")
 }
 \description{
 A dataset with key info on parliamentary questions from the Norwegian Storting (1996-2015).
