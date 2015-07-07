@@ -17,6 +17,10 @@
    \item{nsd_id}{Integer with answering minister's id}
    \item{session}{Character string of the session the question was asked and answered}
    \item{question}{Character string containing the full question text}
+   \item{party_id}{Integer with id of questioning party from ParlGov}
+   \item{cabinet_party}{Binary variable indicating whether the party has cabinet position (1) or not (0)}
+   \item{election_date}{Date of election the question was asked under}
+   \item{seats}{Integer with seats in parliament for questioner}
    }}
 \source{
 \url{https://www.stortinget.no/no/Saker-og-publikasjoner/Sporsmal/Sporretimesporsmal/}
