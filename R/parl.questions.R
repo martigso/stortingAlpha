@@ -46,10 +46,14 @@ parl.questions<-function(url, nPages){
   htmlTree3 <- gsub("^\\r\\n[[:space:]]+|[[:space:]]+$", "", unlist(xpathApply(htmlTree, "//h3", xmlValue)))
   htmlTree4 <- gsub("^\\r\\n[[:space:]]+|[[:space:]]+$", "", unlist(xpathApply(htmlTree, "//h4", xmlValue)))
 
-  tempDate <- na.omit(htmlTree4[sapply(htmlTree4, function(x) grep("Bortfaller|Besvart:|Sp[[:alpha:]]rsm[[:alpha:]]let er trukket", x)==1)==TRUE])
+  tempDate <- na.omit(
+    htmlTree4[sapply(htmlTree4, function(x)
+      grep("Til behandling|Bortfaller|Besvart:|Sp[[:alpha:]]rsm[[:alpha:]]let er trukket", x)==1)==TRUE])
   tempDate <- strapply(tempDate, "[0-9]{1,2}\\D[0-9]{1,2}\\D[0-9]{1,4}")
 
-  tempAnswBy <- na.omit(htmlTree4[sapply(htmlTree4, function(x) grep("Bortfaller|Besvart:|Sp[[:alpha:]]rsm[[:alpha:]]let er trukket", x)==1)==TRUE])
+  tempAnswBy <- na.omit(
+    htmlTree4[sapply(htmlTree4, function(x)
+      grep("Til behandling|Bortfaller|Besvart:|Sp[[:alpha:]]rsm[[:alpha:]]let er trukket", x)==1)==TRUE])
   tempAnswBy <- unlist(strsplit(tempAnswBy, "^.*?minister |^.*?EU "))
 
 
@@ -59,7 +63,7 @@ parl.questions<-function(url, nPages){
                    dateAnsw = as.Date(as.character(unlist(ifelse(lapply(tempDate, is.null)==TRUE, "Not answered", tempDate))),
                                       "%d.%m.%Y"),
                    type = unlist(strapply(htmlTree3,
-                                          "Sp[[:alpha:]]rretimesp[[:alpha:]]rsm[[:alpha:]]l|Muntlig sp[[:alpha:]]rsm[[:alpha:]]l|Sp[[:alpha:]]rsm[[:alpha:]]l ved m[[:alpha:]]tets slutt|Sp[[:alpha:]]rsm[[:alpha:]]l til presidentskapet|Fra representanten")),
+                                          "Interpellasjon|Sp[[:alpha:]]rretimesp[[:alpha:]]rsm[[:alpha:]]l|Muntlig sp[[:alpha:]]rsm[[:alpha:]]l|Sp[[:alpha:]]rsm[[:alpha:]]l ved m[[:alpha:]]tets slutt|Sp[[:alpha:]]rsm[[:alpha:]]l til presidentskapet|Fra representanten")),
                    from = gsub(" \\(.*?$", "" , gsub("^.*?fra ", "", htmlTree3)),
                    answBy = tempAnswBy[which(nchar(tempAnswBy)>0)],
                    toDepMinister = gsub("^.*?til ", "", htmlTree3),
