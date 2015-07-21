@@ -27,6 +27,11 @@ parl.questions<-function(url, nPages){
   options(error=NULL)
   cases <- list()
   htmlTree <- list()
+  typeString <- gsub("\\n", "", gsub("\\n[[:space:]]{1,50}", "", "Interpellasjon|Sp[[:alpha:]]rretimesp[[:alpha:]]rsm[[:alpha:]]l|
+                     Skriftlig sp[[:alpha:]]rsm[[:alpha:]]l|Muntlig sp[[:alpha:]]rsm[[:alpha:]]l|
+                                     Sp[[:alpha:]]rsm[[:alpha:]]l ved m[[:alpha:]]tets slutt|
+                                     Sp[[:alpha:]]rsm[[:alpha:]]l til presidentskapet|Fra representanten"))
+
   url <- unlist(strsplit(gsub("([0-9]+)","~\\1~",url), "~" ))
 
   if(length(url)==3){
@@ -46,6 +51,14 @@ parl.questions<-function(url, nPages){
   htmlTree3 <- gsub("^\\r\\n[[:space:]]+|[[:space:]]+$", "", unlist(xpathApply(htmlTree, "//h3", xmlValue)))
   htmlTree4 <- gsub("^\\r\\n[[:space:]]+|[[:space:]]+$", "", unlist(xpathApply(htmlTree, "//h4", xmlValue)))
 
+  if(length(htmlTree4)>=1122){
+    htmlTree4[1122] <- gsub("Innlevert: 24.11.1997", "Sendt: 24.11.1997", as.character(htmlTree4[1122]))
+  }
+
+  if(any(grep("Dokument nr. 15:942 \\(2014-2015\\)", htmlTree4))==TRUE){
+    htmlTree4 <- c(htmlTree4[1:1292], "Besvart: 06.05.2015 av finansminister Siv Jensen", htmlTree4[1293:length(htmlTree4)])
+  }
+
   tempDate <- na.omit(
     htmlTree4[sapply(htmlTree4, function(x)
       grep("Til behandling|Bortfaller|Besvart:|Sp[[:alpha:]]rsm[[:alpha:]]let er trukket", x)==1)==TRUE])
@@ -56,14 +69,21 @@ parl.questions<-function(url, nPages){
       grep("Til behandling|Bortfaller|Besvart:|Sp[[:alpha:]]rsm[[:alpha:]]let er trukket", x)==1)==TRUE])
   tempAnswBy <- unlist(strsplit(tempAnswBy, "^.*?minister |^.*?EU "))
 
+  if(any(grep("Sp[[:alpha:]]rretimesp[[:alpha:]]rsm[[:alpha:]]l", htmlTree4))==FALSE){
+    tempId <- na.omit(htmlTree4[sapply(htmlTree4, function(x) grep("Dokument nr. |Interpellasjon nr. ", x)==1)==TRUE])
+    tempId <- gsub(" ", "", gsub("[[:punct:]]", "", sapply(strsplit(tempId, "Dokument nr. |Interpellasjon nr. "), "[[", 2)))
+  } else {
+    tempId <- rep(NA, length(htmlTree3))
+  }
 
-  temp<-data.frame(dateAsked = as.Date(gsub("Datert: ", "",
+
+  temp<-data.frame(docId = tempId,
+                   dateAsked = as.Date(gsub("Datert: |Sendt: ", "",
                                             na.omit(htmlTree4[sapply(htmlTree4, function(x)
-                                              grep("Datert:", x)==1)==TRUE])), "%d.%m.%Y"),
+                                              grep("Datert: |Sendt: ", x)==1)==TRUE])), "%d.%m.%Y"),
                    dateAnsw = as.Date(as.character(unlist(ifelse(lapply(tempDate, is.null)==TRUE, "Not answered", tempDate))),
                                       "%d.%m.%Y"),
-                   type = unlist(strapply(htmlTree3,
-                                          "Interpellasjon|Sp[[:alpha:]]rretimesp[[:alpha:]]rsm[[:alpha:]]l|Muntlig sp[[:alpha:]]rsm[[:alpha:]]l|Sp[[:alpha:]]rsm[[:alpha:]]l ved m[[:alpha:]]tets slutt|Sp[[:alpha:]]rsm[[:alpha:]]l til presidentskapet|Fra representanten")),
+                   type = unlist(strapply(htmlTree3, typeString)),
                    from = gsub(" \\(.*?$", "" , gsub("^.*?fra ", "", htmlTree3)),
                    answBy = tempAnswBy[which(nchar(tempAnswBy)>0)],
                    toDepMinister = gsub("^.*?til ", "", htmlTree3),
