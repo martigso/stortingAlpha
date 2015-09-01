@@ -24,7 +24,7 @@ mend.text<-function(path){
   setwd(path)
   path<-getwd()
   year<-as.numeric(na.omit(as.numeric(unlist(strsplit(path, "[^0-9]+")))))
-  textfile<-readLines(paste0("s", year, ".txt"), encoding="UTF-8")
+  textfile<-readLines(paste0("St_tidende", year, ".txt"), encoding="UTF-8")
 
   textfile<-gsub("-$", "", textfile)
 
@@ -59,7 +59,8 @@ mend.text<-function(path){
             estemmig|onstonnnig|Enst.:|bifaldtes e-nst.|ensleirinnig|
             enlstemmig|enetetnznig|e11stem111ig|ei1sten1i;nig|entemmig|
             censlennnig|onst.|enslonnmig|twist|Entemmig|euistennnig|
-            ennstennmig|entem mig|ennstemnrig"
+            ennstennmig|entem mig|ennstemnrig|eustem|len/sitemmig|
+            endcemmigt|on[[:alnum:]]temmign|enptem"
 
   textfile<-gsub(strings, "enstemmig", textfile)
 

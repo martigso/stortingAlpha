@@ -1,0 +1,32 @@
+#' Data on parliamentary written questions from 1996-2015 from the Norwegian Storting
+#'
+#' A dataset with key info on parliamentary written questions from the Norwegian Storting (1996-2015).
+#'
+#' @usage data("interpAll")
+#'
+#' @format A data frame with 21216 rows and 19 variables
+#'  \describe{
+#'    \item{docId}{Id of question document}
+#'    \item{dateAsked}{Date question was registered}
+#'    \item{dateAnsw}{Date question was answered (will only vary from \emph{dateAsked} when type is "Spørretimespørsmål)}
+#'    \item{type}{Character string describing the type of question}
+#'    \item{from}{Character string with name of the questioner}
+#'    \item{fromParty}{Character string with party of questioner}
+#'    \item{answBy}{Character string of minister answering the question}
+#'    \item{answByParty}{Character string of the answering minister's party}
+#'    \item{toDepMinister}{Character string with title of the minister the question was asked to}
+#'    \item{nsd_id}{Integer with answering minister's id}
+#'    \item{session}{Character string of the session the question was asked and answered}
+#'    \item{year}{The year the question was asked}
+#'    \item{question}{Character string containing the full question text}
+#'    \item{party_id}{Integer with id of questioning party from ParlGov}
+#'    \item{cabinet_party}{Binary variable indicating whether the party has cabinet position (1) or not (0)}
+#'    \item{election_date}{Date of election the question was asked under}
+#'    \item{seats}{Integer with seats in parliament for questioner}
+#'    \item{left_right}{Ideological position from ParlGov}
+#'    }
+#'
+#'
+#' @source \url{https://www.stortinget.no/no/Saker-og-publikasjoner/Sporsmal/Sporretimesporsmal/}
+#'
+"writtenAll"

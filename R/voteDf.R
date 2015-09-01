@@ -25,23 +25,40 @@
 #'
 votedf<-function(pattern, txtvector, strlength = 200){
   options(error=NULL)
+
+  if(require(gsubfn)==FALSE){
+    stop("Need to install package 'gsubfn'")
+  }
+  else {
+    require(gsubfn)
+  }
+
   tempdf<-data.frame(cbind(vote=unlist(strapply(txtvector, pattern)),
                            text=unlist(substring(as.list(unlist(strsplit(txtvector, pattern)))[-1], 1, strlength))))
 
   tempdf$enstem<-ifelse(grepl("enstemmig", tempdf$text)==TRUE | grepl("enst.", tempdf$text)==TRUE, 1, 0)
 
-  tempdf$motstem<-ifelse(grepl("m[[:alpha:]]d [[:digit:]]", tempdf$text) | grepl("m[[:alpha:]]d[[:digit:]]", tempdf$text)==TRUE |
+  tempdf$motstem<-ifelse(grepl("m[[:alpha:]]d [[:digit:]]", tempdf$text)==TRUE | grepl("m[[:alpha:]]d[[:digit:]]", tempdf$text)==TRUE |
                            grepl("M[[:alpha:]]d [[:digit:]]", tempdf$text)==TRUE | grepl("M[[:alpha:]]d[[:digit:]]", tempdf$text)==TRUE |
-                           grepl("[[:alpha:]]lternativ votering", tempdf$text)==TRUE | grepl("[[:alpha:]]kkebifaldt", tempdf$text)==TRUE |
+                           grepl("m[[:alpha:]]t [[:digit:]]", tempdf$text) | grepl("m[[:alpha:]]t[[:digit:]]", tempdf$text)==TRUE |
+                           grepl("M[[:alpha:]]t [[:digit:]]", tempdf$text)==TRUE | grepl("M[[:alpha:]]t[[:digit:]]", tempdf$text)==TRUE |
+                           grepl("[[:alpha:]]kkebifaldt", tempdf$text)==TRUE |
                            grepl("[[:alpha:]]kke bifaldt", tempdf$text)==TRUE | grepl("[0-9]{1,2} stemmer", tempdf$text)==TRUE,
                          1,0)
 
-    tempdf$motstem<-ifelse(tempdf$motstem==1 & grepl("de [0-9]{1,2} herrer", tempdf$text)==TRUE |
+  tempdf$motstem<-ifelse(tempdf$motstem==1 & grepl("de [0-9]{1,2} herrer", tempdf$text)==TRUE |
                            grepl("De [0-9]{1,2} herrer", tempdf$text)==TRUE, 0, tempdf$motstem)
 
   tempdf$rollcall<-ifelse(grepl("nanveopprop", tempdf$text)==TRUE | grepl("navneopraab", tempdf$text)==TRUE |
                             grepl("de [0-9]{1,2} herrer", tempdf$text)==TRUE | grepl("De [0-9]{1,2} herrer", tempdf$text)==TRUE, 1,0)
 
+  tempdf$altvote <- ifelse(grepl("[[:alpha:]]lternativ votering", tempdf$text)==TRUE |
+                             grepl("[[:alpha:]]lternativ voterig", tempdf$text)==TRUE |
+                             grepl("[[:alpha:]]idere var indstillet", tempdf$text)==TRUE, 1, 0)
+
+  tempdf[,3:5] <- apply(tempdf[,3:5], 2, function(x) ifelse(tempdf$altvote==1, 0, x))
+
   return(tempdf)
 
 }
+
