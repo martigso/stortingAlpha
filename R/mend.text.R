@@ -19,51 +19,163 @@
 #' @export
 #'
 
-mend.text<-function(path){
+mend.text <- function(path, chamber = "st"){
   options(error=NULL)
   setwd(path)
-  path<-getwd()
-  year<-as.numeric(na.omit(as.numeric(unlist(strsplit(path, "[^0-9]+")))))
-  textfile<-readLines(paste0("St_tidende", year, ".txt"), encoding="UTF-8")
+  path <- getwd()
 
-  textfile<-gsub("-$", "", textfile)
+  year <- as.numeric(na.omit(as.numeric(unlist(strsplit(dir(), "[^0-9]+")))))
 
-  textfile<-paste(textfile, collapse="")
+  if(chamber == "st"){
+    for(i in 1:length(year)){
+      textfile <- readLines(paste0("St_tidende", year[i], "\\s", year[i], ".txt"), encoding="UTF-8")
 
-  # Strings of common misreadings to loop over
-  strings<-"Votering:|V o t e r i n g :|V o t e r i n g:|V 0 t e r i n g:|
-            V 0 t e r i n g :|votering:|Voteringz|Votering!|V o t e r i n g t|
-            V 0 t e r in g :|V 0 t e ri n g:|V o t e ri n g:|V o t e ri n g :|
-            V 0 t eir i n g :|Voterintg:|Votoring;|Voterin g:|V o t e. r i n g :|
-            V o terinlg:|Voteringf|Voteri ng:|Votejring:|V 0|teri ngt|
-            V 0 t de ri n g:|Vetering:|Voteiringz|Voteringzl|
-            V 0 t e r i n g z|Voteriing:|v otering:|V 0 te ri n g:|V otering:|
-            Vo,tering:|Vptering:|Vrotering:|V 0 t e  i n g:|V o tje r i n g:|
-            Vjoterimg:|V o te r i n g :|V ote ring:|V o te ri n g:|V0te:ring:|
-            V ote ri n g:|Vo t e r i n g :|Vg0 tzering:|V o te ring:|V o tering:|
-            V oteri ng:|V o t e ring:|V o t e ring:|Vote-ring:|V 0 t e ri n g :|
-            V 0 te r i n g :|V o t. e ri n g :|Vo-tering:|Votcring:|
-            Vhojt e r i n g:|V o t e r i n g z|Vote ri-ng:|V ot e. ri n g :|
-            Yotering:|Y otering.|Voterfi n g:|Vote ring:|Voteñing:|Vot ering:|
-            V 0 te r i n g:|Vtfcering:|V o t e r i n g 2 .|Vot-ering:|Vntering:|
-            Votering-z|V 0 t er i n g :|Xoterlng|Voterinrr:|Voteringi|
-            Voteriiig:|Voteringr|V oteri n g:|Voteri n g:|Vcjtering:|Voterjng:|
-            Voterirxg:|Votoring:|Volering:|V0 tu r i .n g:|Voterinv:|
-            V 0 t e r i n g;|V 0 t e r i 11 g:|V 0 t e r i n g r|Vxitering:|
-            V o t e r in g :|V oter ing:|Voteringe|Voteri-ng:|Voterfing:"
+      textfile <- gsub("-$", "", textfile)
 
-  textfile<-gsub(strings, "Votering:", textfile)
+      textfile <- gsub("'", "", textfile)
 
-  strings<-"Enstemmig|en-stemmig|cnstennnig|onsteimni|existemmig|eirstemmig|
-            nstemmig|ersstemtnig|Smithsstemmig|on-stemmig|en-sternmig|
-            estemmig|onstonnnig|Enst.:|bifaldtes e-nst.|ensleirinnig|
-            enlstemmig|enetetnznig|e11stem111ig|ei1sten1i;nig|entemmig|
-            censlennnig|onst.|enslonnmig|twist|Entemmig|euistennnig|
-            ennstennmig|entem mig|ennstemnrig|eustem|len/sitemmig|
-            endcemmigt|on[[:alnum:]]temmign|enptem"
+      textfile <- paste(textfile, collapse=" ")
 
-  textfile<-gsub(strings, "enstemmig", textfile)
+      # Strings of common misreadings to loop over
+      strings <- "Votering:|V o t e r i n g :|V o t e r i n g:|V 0 t e r i n g:|
+                  V 0 t e r i n g :|votering:|Voteringz|Votering!|V o t e r i n g t|
+                  V 0 t e r in g :|V 0 t e ri n g:|V o t e ri n g:|V o t e ri n g :|
+                  V 0 t eir i n g :|Voterintg:|Votoring;|Voterin g:|V o t e. r i n g :|
+                  V o terinlg:|Voteringf|Voteri ng:|Votejring:|V 0|teri ngt|
+                  V 0 t de ri n g:|Vetering:|Voteiringz|Voteringzl|
+                  V 0 t e r i n g z|Voteriing:|v otering:|V 0 te ri n g:|V otering:|
+                  Vo,tering:|Vptering:|Vrotering:|V 0 t e  i n g:|V o tje r i n g:|
+                  Vjoterimg:|V o te r i n g :|V ote ring:|V o te ri n g:|V0te:ring:|
+                  V ote ri n g:|Vo t e r i n g :|Vg0 tzering:|V o te ring:|V o tering:|
+                  V oteri ng:|V o t e ring:|V o t e ring:|Vote-ring:|V 0 t e ri n g :|
+                  V 0 te r i n g :|V o t. e ri n g :|Vo-tering:|Votcring:|
+                  Vhojt e r i n g:|V o t e r i n g z|Vote ri-ng:|V ot e. ri n g :|
+                  Yotering:|Y otering.|Voterfi n g:|Vote ring:|Voteñing:|Vot ering:|
+                  V 0 te r i n g:|Vtfcering:|V o t e r i n g 2 .|Vot-ering:|Vntering:|
+                  Votering-z|V 0 t er i n g :|Xoterlng|Voterinrr:|Voteringi|
+                  Voteriiig:|Voteringr|V oteri n g:|Voteri n g:|Vcjtering:|Voterjng:|
+                  Voterirxg:|Votoring:|Volering:|V0 tu r i .n g:|Voterinv:|
+                  V 0 t e r i n g;|V 0 t e r i 11 g:|V 0 t e r i n g r|Vxitering:|
+                  V o t e r in g :|V oter ing:|Voteri-ng:|Voterfing:|
+                  V o[']t e r i n g :|Voterting|Voteringc|Votericng:|Voterinz|V e t e ri ,n g :|
+                  Voterilng|Veterings|Voterlng:|Votering."
 
-return(textfile)
+      textfile <- gsub(strings, "Votering:", textfile)
 
+      strings <- "Enstemmig|en-stemmig|cnstennnig|onsteimni|existemmig|eirstemmig|
+                  nstemmig|ersstemtnig|Smithsstemmig|on-stemmig|en-sternmig|
+                  estemmig|onstonnnig|Enst.:|bifaldtes e-nst.|ensleirinnig|
+                  enlstemmig|enetetnznig|e11stem111ig|ei1sten1i;nig|entemmig|
+                  censlennnig|onst.|enslonnmig|twist|Entemmig|euistennnig|
+                  ennstennmig|entem mig|ennstemnrig|eustem|len/sitemmig|
+                  endcemmigt|on[[:alnum:]]temmign|enptem|rnstennnig|ern stemrnig|en stemmig|
+                  len stemmig|en steznmig|en siemmig"
+
+      textfile <- gsub(strings, "enstemmig", textfile)
+
+      writeLines(textfile, paste0("St_tidende", year[i], "\\St_tidende", year[i], "_red.txt"))
+    }
+  }
+
+    if(chamber == "lt"){
+      for(i in 1:length(year)){
+        textfile <- readLines(paste0("lt_forhandlinger", year[i], "\\l", year[i], ".txt"), encoding="UTF-8")
+
+        textfile <- gsub("-$", "", textfile)
+
+        textfile <- gsub("'", "", textfile)
+
+        textfile <- paste(textfile, collapse=" ")
+
+        # Strings of common misreadings to loop over
+        strings <- "Votering:|V o t e r i n g :|V o t e r i n g:|V 0 t e r i n g:|
+                  V 0 t e r i n g :|votering:|Voteringz|Votering!|V o t e r i n g t|
+                  V 0 t e r in g :|V 0 t e ri n g:|V o t e ri n g:|V o t e ri n g :|
+                  V 0 t eir i n g :|Voterintg:|Votoring;|Voterin g:|V o t e. r i n g :|
+                  V o terinlg:|Voteringf|Voteri ng:|Votejring:|V 0|teri ngt|
+                  V 0 t de ri n g:|Vetering:|Voteiringz|Voteringzl|
+                  V 0 t e r i n g z|Voteriing:|v otering:|V 0 te ri n g:|V otering:|
+                  Vo,tering:|Vptering:|Vrotering:|V 0 t e  i n g:|V o tje r i n g:|
+                  Vjoterimg:|V o te r i n g :|V ote ring:|V o te ri n g:|V0te:ring:|
+                  V ote ri n g:|Vo t e r i n g :|Vg0 tzering:|V o te ring:|V o tering:|
+                  V oteri ng:|V o t e ring:|V o t e ring:|Vote-ring:|V 0 t e ri n g :|
+                  V 0 te r i n g :|V o t. e ri n g :|Vo-tering:|Votcring:|
+                  Vhojt e r i n g:|V o t e r i n g z|Vote ri-ng:|V ot e. ri n g :|
+                  Yotering:|Y otering.|Voterfi n g:|Vote ring:|Voteñing:|Vot ering:|
+                  V 0 te r i n g:|Vtfcering:|V o t e r i n g 2 .|Vot-ering:|Vntering:|
+                  Votering-z|V 0 t er i n g :|Xoterlng|Voterinrr:|Voteringi|
+                  Voteriiig:|Voteringr|V oteri n g:|Voteri n g:|Vcjtering:|Voterjng:|
+                  Voterirxg:|Votoring:|Volering:|V0 tu r i .n g:|Voterinv:|
+                  V 0 t e r i n g;|V 0 t e r i 11 g:|V 0 t e r i n g r|Vxitering:|
+                  V o t e r in g :|V oter ing:|Voteri-ng:|Voterfing:|
+                  V o[']t e r i n g :|Voterting|Voteringc|Votericng:|Voterinz|V e t e ri ,n g :|
+                  Voterilng|Veterings|Voterlng:|Votering."
+
+        textfile <- gsub(strings, "Votering:", textfile)
+
+        strings <- "Enstemmig|en-stemmig|cnstennnig|onsteimni|existemmig|eirstemmig|
+                  nstemmig|ersstemtnig|Smithsstemmig|on-stemmig|en-sternmig|
+                  estemmig|onstonnnig|Enst.:|bifaldtes e-nst.|ensleirinnig|
+                  enlstemmig|enetetnznig|e11stem111ig|ei1sten1i;nig|entemmig|
+                  censlennnig|onst.|enslonnmig|twist|Entemmig|euistennnig|
+                  ennstennmig|entem mig|ennstemnrig|eustem|len/sitemmig|
+                  endcemmigt|on[[:alnum:]]temmign|enptem|rnstennnig|ern stemrnig|en stemmig|
+                  len stemmig|en steznmig|en siemmig"
+
+        textfile <- gsub(strings, "enstemmig", textfile)
+
+        writeLines(textfile, paste0("lt_forhandlinger", year[i], "\\lt_forhandlinger", year[i], "_red.txt"))
+      }
+    }
+
+    if(chamber == "ot"){
+      for(i in 1:length(year)){
+        textfile <- readLines(paste0("ot_forhandlinger", year[i], "\\o", year[i], ".txt"), encoding="UTF-8")
+
+        textfile <- gsub("-$", "", textfile)
+
+        textfile <- gsub("'", "", textfile)
+
+        textfile <- paste(textfile, collapse=" ")
+
+        # Strings of common misreadings to loop over
+        strings <- "Votering:|V o t e r i n g :|V o t e r i n g:|V 0 t e r i n g:|
+                  V 0 t e r i n g :|votering:|Voteringz|Votering!|V o t e r i n g t|
+                  V 0 t e r in g :|V 0 t e ri n g:|V o t e ri n g:|V o t e ri n g :|
+                  V 0 t eir i n g :|Voterintg:|Votoring;|Voterin g:|V o t e. r i n g :|
+                  V o terinlg:|Voteringf|Voteri ng:|Votejring:|V 0|teri ngt|
+                  V 0 t de ri n g:|Vetering:|Voteiringz|Voteringzl|
+                  V 0 t e r i n g z|Voteriing:|v otering:|V 0 te ri n g:|V otering:|
+                  Vo,tering:|Vptering:|Vrotering:|V 0 t e  i n g:|V o tje r i n g:|
+                  Vjoterimg:|V o te r i n g :|V ote ring:|V o te ri n g:|V0te:ring:|
+                  V ote ri n g:|Vo t e r i n g :|Vg0 tzering:|V o te ring:|V o tering:|
+                  V oteri ng:|V o t e ring:|V o t e ring:|Vote-ring:|V 0 t e ri n g :|
+                  V 0 te r i n g :|V o t. e ri n g :|Vo-tering:|Votcring:|
+                  Vhojt e r i n g:|V o t e r i n g z|Vote ri-ng:|V ot e. ri n g :|
+                  Yotering:|Y otering.|Voterfi n g:|Vote ring:|Voteñing:|Vot ering:|
+                  V 0 te r i n g:|Vtfcering:|V o t e r i n g 2 .|Vot-ering:|Vntering:|
+                  Votering-z|V 0 t er i n g :|Xoterlng|Voterinrr:|Voteringi|
+                  Voteriiig:|Voteringr|V oteri n g:|Voteri n g:|Vcjtering:|Voterjng:|
+                  Voterirxg:|Votoring:|Volering:|V0 tu r i .n g:|Voterinv:|
+                  V 0 t e r i n g;|V 0 t e r i 11 g:|V 0 t e r i n g r|Vxitering:|
+                  V o t e r in g :|V oter ing:|Voteri-ng:|Voterfing:|
+                  V o[']t e r i n g :|Voterting|Voteringc|Votericng:|Voterinz|V e t e ri ,n g :|
+                  Voterilng|Veterings|Voterlng:|Votering."
+
+        textfile <- gsub(strings, "Votering:", textfile)
+
+        strings <- "Enstemmig|en-stemmig|cnstennnig|onsteimni|existemmig|eirstemmig|
+                  nstemmig|ersstemtnig|Smithsstemmig|on-stemmig|en-sternmig|
+                  estemmig|onstonnnig|Enst.:|bifaldtes e-nst.|ensleirinnig|
+                  enlstemmig|enetetnznig|e11stem111ig|ei1sten1i;nig|entemmig|
+                  censlennnig|onst.|enslonnmig|twist|Entemmig|euistennnig|
+                  ennstennmig|entem mig|ennstemnrig|eustem|len/sitemmig|
+                  endcemmigt|on[[:alnum:]]temmign|enptem|rnstennnig|ern stemrnig|en stemmig|
+                  len stemmig|en steznmig|en siemmig"
+
+        textfile <- gsub(strings, "enstemmig", textfile)
+
+        writeLines(textfile, paste0("ot_forhandlinger", year[i], "\\ot_forhandlinger", year[i], "_red.txt"))
+      }
+    }
 }

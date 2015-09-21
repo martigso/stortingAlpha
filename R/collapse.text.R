@@ -19,21 +19,83 @@
 #' @export
 #'
 
-collapse.text<-function(path, overwrite=TRUE){
-  options(error=NULL)
+collapse.text<-function(path, overwrite = TRUE, lastCollapse = FALSE, chamber = "st"){
+  options(error = NULL)
+
+  year<-as.numeric(na.omit(as.numeric(unlist(strsplit(path, "[^0-9]+")))))
+  letter <- tail(unlist(strsplit(path, "\\/")), 1)
 
   if(Sys.info()[1]!="Windows"){
     stop("This command only works on Windows OS")
   }
 
-  setwd(path)
-  path<-getwd()
-  year<-as.numeric(na.omit(as.numeric(unlist(strsplit(path, "[^0-9]+")))))
 
-  if(paste0("s", year, ".txt") %in% list.files(path)==TRUE & overwrite==FALSE){
-    stop("Overwrite is set to false, and there is already a full text file in the directory.")
-    } else {
-      shell(shQuote(paste0("copy *.txt ", "s", year, ".txt")))
+  #if(paste0("o", year, ".txt") %in% list.files(path)==TRUE & overwrite==FALSE){
+   # stop("Overwrite is set to false, and there is already a full text file in the directory.")
+  #  }
+  if(chamber == "st"){
+    if(lastCollapse==FALSE){
+      setwd(path)
+
+      shell(shQuote(paste0("copy *.txt ", letter, year, ".txt")))
+
+      path <- gsub("/", "\\\\", path)
+
+      shell(shQuote(paste0("move ", path, letter, year,  ".txt ", substring(path, 1, 35))))
+
+      }
+
+    if(lastCollapse == TRUE){
+
+      path <- unique(substring(path, 1, 35))
+
+      setwd(path)
+
+      shell(shQuote(paste0("copy ", "*.txt ", "s", year, ".txt")))
     }
-  return(paste0("The file s", year, ".txt was successfully made in ", path, "."))
   }
+
+  if(chamber == "lt"){
+    if(lastCollapse==FALSE){
+      setwd(path)
+
+      shell(shQuote(paste0("copy *.txt ", letter, year, ".txt")))
+
+      path <- gsub("/", "\\\\", path)
+
+      shell(shQuote(paste0("move ", path, letter, year,  ".txt ", substring(path, 1, 40))))
+
+    }
+
+    if(lastCollapse == TRUE){
+
+      path <- unique(substring(path, 1, 40))
+
+      setwd(path)
+
+      shell(shQuote(paste0("copy ", "*.txt ", "l", year, ".txt")))
+    }
+  }
+
+  if(chamber == "ot"){
+    if(lastCollapse==FALSE){
+      setwd(path)
+
+      shell(shQuote(paste0("copy *.txt ", letter, year, ".txt")))
+
+      path <- gsub("/", "\\\\", path)
+
+      shell(shQuote(paste0("move ", path, letter, year,  ".txt ", substring(path, 1, 40))))
+
+    }
+
+    if(lastCollapse == TRUE){
+
+      path <- unique(substring(path, 1, 40))
+
+      setwd(path)
+
+      shell(shQuote(paste0("copy ", "*.txt ", "o", year, ".txt")))
+    }
+  }
+}

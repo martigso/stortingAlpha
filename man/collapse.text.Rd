@@ -4,7 +4,8 @@
 \alias{collapse.text}
 \title{Construct text document on single page text files}
 \usage{
-collapse.text(path, overwrite = TRUE)
+collapse.text(path, overwrite = TRUE, lastCollapse = FALSE,
+  chamber = "st")
 }
 \arguments{
 \item{path}{String specifying the directory containing the single page text files}

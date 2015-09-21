@@ -4,7 +4,7 @@
 \alias{mend.text}
 \title{Mend full Storting text file before making vote data frame}
 \usage{
-mend.text(path)
+mend.text(path, chamber = "st")
 }
 \arguments{
 \item{path}{Character string of the directory where the full text file can be located.}
