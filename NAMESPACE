@@ -2,6 +2,7 @@
 
 export(collapse.text)
 export(mend.text)
+export(norStopWords)
 export(order.files)
 export(parl.questions)
 export(votedf)
