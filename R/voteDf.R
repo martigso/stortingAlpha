@@ -23,7 +23,7 @@
 #'
 #' @export
 #'
-votedf<-function(pattern, txtvector, strlength = 200){
+votedf <- function(pattern, txtvector, strlength = 200){
   options(error=NULL)
 
   if(require(gsubfn)==FALSE){
@@ -33,23 +33,32 @@ votedf<-function(pattern, txtvector, strlength = 200){
     require(gsubfn)
   }
   require(stringi)
+  year <- as.numeric(na.omit(as.numeric(unlist(strsplit(dir(), "[^0-9]+")))))
+  preText <- lapply(txtvector, function(x) unlist(strsplit(as.character(x), pattern)))
+    cat("Text split done...\n")
 
-  preText <- unlist(as.list(unlist(strsplit(as.character(txtvector), pattern))))
-  nWordsTheme <- stri_count_words(preText[-length(preText)])
-  #preText <- ifelse(nchar(preText)>15000, substring(preText, nchar(preText)-15000, nchar(preText)), preText)
-    cat("Text split and word count complete...\n")
-  postText <- unlist(substring(as.list(unlist(strsplit(as.character(txtvector), pattern)))[-1], 1, 2000))
+  nWordsTheme <- lapply(preText, function(x) stri_count_words(x[-length(x)]))
+    cat("Word count complete...\n")
 
-  tempdf<-data.frame(cbind(vote=as.character(unlist(strapply(txtvector, pattern))),
-                           themeText=as.character(preText[-length(preText)]),
-                           voteText=as.character(postText),
-                           nWordsTheme=as.numeric(nWordsTheme),
-                           totWords=as.numeric(stri_count_words(txtvector))))
-    cat("Data frame ready")
+  postText <- lapply(txtvector, function(x) unlist(substring(as.list(unlist(strsplit(as.character(x), pattern)))[-1], 1, 2000)))
+    cat("Post text done...\n")
 
-  tempdf$enstem<-ifelse(grepl("enstemmig", tempdf$voteText)==TRUE | grepl("enst.", tempdf$voteText)==TRUE, 1, 0)
+  tempdf <- list()
+  for(i in 1:length(txtvector)){
+    tempdf[[i]] <-  data.frame(cbind(vote=as.character(unlist(strapply(txtvector[[i]], pattern))),
+                                themeText=as.character(preText[[i]][-length(preText[[i]])]),
+                                voteText=as.character(postText[[i]]),
+                                nWordsTheme=as.numeric(nWordsTheme[[i]]),
+                                totWords=as.numeric(stri_count_words(txtvector[[i]])),
+                                year=year[i]))
+                     cat(paste("Data frame", i, "of", length(txtvector), "done\n"))
+  }
 
-  tempdf$motstem<-ifelse(grepl("m[[:alpha:]]d [[:digit:]]", tempdf$voteText)==TRUE | grepl("m[[:alpha:]]d[[:digit:]]", tempdf$voteText)==TRUE |
+  tempdf <- do.call(rbind, tempdf)
+
+  tempdf$enstem <- ifelse(grepl("enstemmig", tempdf$voteText)==TRUE | grepl("enst.", tempdf$voteText)==TRUE, 1, 0)
+    cat("'enstem' done...\n")
+  tempdf$motstem <- ifelse(grepl("m[[:alpha:]]d [[:digit:]]", tempdf$voteText)==TRUE | grepl("m[[:alpha:]]d[[:digit:]]", tempdf$voteText)==TRUE |
                            grepl("M[[:alpha:]]d [[:digit:]]", tempdf$voteText)==TRUE | grepl("M[[:alpha:]]d[[:digit:]]", tempdf$voteText)==TRUE |
                            grepl("m[[:alpha:]]t [[:digit:]]", tempdf$voteText) | grepl("m[[:alpha:]]t[[:digit:]]", tempdf$voteText)==TRUE |
                            grepl("M[[:alpha:]]t [[:digit:]]", tempdf$voteText)==TRUE | grepl("M[[:alpha:]]t[[:digit:]]", tempdf$voteText)==TRUE |
@@ -58,7 +67,7 @@ votedf<-function(pattern, txtvector, strlength = 200){
                            grepl("[0-9]{1,3} st[[:punct:]]", tempdf$voteText)==TRUE,
                          1,0)
 
-  tempdf$rollcall<-ifelse(grepl("nanve[[:space:]]{0,1}opprop", tempdf$voteText)==TRUE | grepl("navne[[:space:]]{0,1}opraab", tempdf$voteText)==TRUE |
+  tempdf$rollcall <- ifelse(grepl("nanve[[:space:]]{0,1}opprop", tempdf$voteText)==TRUE | grepl("navne[[:space:]]{0,1}opraab", tempdf$voteText)==TRUE |
                             grepl("namn[[:space:]]{0,1}opprop", tempdf$voteText)==TRUE | grepl("navn[[:space:]]{0,1}oprop", tempdf$voteText)==TRUE |
                             grepl("namne[[:space:]]{0,1}upprop", tempdf$voteText)==TRUE | grepl("namne[[:space:]]{0,1}uprop", tempdf$voteText)==TRUE |
                             grepl("[[:alpha:]]e[[:space:]]{0,1}[0-9]{1,3}[[:space:]]{0,1}herrer", tempdf$voteText)==TRUE |
@@ -68,15 +77,15 @@ votedf<-function(pattern, txtvector, strlength = 200){
                             grepl("[[:alpha:]]ei[[:space:]]{0,1}[0-9]{1,3}[[:space:]]{0,1}repr[[:alpha:]]sentantane",tempdf$voteText)==TRUE|
                             grepl("[[:alpha:]]ei[[:space:]]{0,1}[0-9]{1,3}[[:space:]]{0,1}repr[[:alpha:]]sentantar",tempdf$voteText)==TRUE,
                           1,0)
-
-  tempdf$motstem<-ifelse(tempdf$motstem==1 & tempdf$rollcall==1, 0, tempdf$motstem)
-
+  cat("'rollcall' done...\n")
+  tempdf$motstem <- ifelse(tempdf$motstem==1 & tempdf$rollcall==1, NA, tempdf$motstem)
+  cat("'motstem' done...\n")
   tempdf$altvote <- ifelse(grepl("[[:alpha:]]lternativ votering", tempdf$voteText)==TRUE |
                              grepl("[[:alpha:]]lternativ voterig", tempdf$voteText)==TRUE |
                              grepl("[[:alpha:]]idere var indstillet", tempdf$voteText)==TRUE, 1, 0)
 
   #tempdf[,3:5] <- apply(tempdf[,3:5], 2, function(x) ifelse(tempdf$altvote==1, 0, x))
-
+  cat("Function done...\n")
   return(tempdf)
 
 }
