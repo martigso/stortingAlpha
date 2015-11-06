@@ -21,23 +21,21 @@ norStopWords <- function(...){
     require(tm)
   }
 
-    words <- c(stopwords("nor"), "aar", "adgang", "altsaa", "anden", "andet", "andre", "anledning", "beslutning",
-               "bestemmelse", "blev", "blive", "bliver", "bør", "burde", "del", "derfor", "dog", "efter", "efterm",
-               "end", "enig", "faa", "faar", "folk", "forhold", "forslag", "første", "frem", "gaa", "gaar", "ganske",
-               "gjøre", "gjort", "godt", "grund", "have", "hele", "heller", "hensyn", "hvad", "ind", "kann", "komme",
-               "kommer", "kunde", "lagtinget", "landet", "led", "lov", "loven", "maa", "mener", "mere", "mig", "naar",
-               "ning", "nogen", "noget", "nok", "odelstinget", "odelstingets", "ogsaa", "ordet", "paa", "præsidenten",
-               "punkt", "ret", "saa", "saadan", "saaledes", "sagt", "sak", "ser", "side", "sig", "sige", "skulde",
-               "staar", "statsraad", "stemme", "stor", "store", "større", "synes", "tid", "tilfælde", "ting", "tror",
-               "under", "været", "vedkommende", "vel", "vilde","all", "almind", "altsa", "and", "andr", "anmerkning",
-               "ann", "arbeid", "bar", "behandling", "bemerkning", "bestemm", "bliv", "burd", "denn", "departement",
-               "dett", "diss", "eft", "ell", "enkelt", "find", "følg", "forandr", "forandring", "form", "først", "gang",
-               "gansk", "gjæld", "gjeld", "gjør", "hadd", "hav", "hel", "hell", "hold", "ikk", "ikkj", "ing", "komite",
-               "komm", "kommun", "kong", "kund", "kunn", "lagting", "land", "lig", "ligg", "mang", "mening", "mer", "mul",
-               "nog", "odelsting", "ogsa", "ord", "paragraf", "præsident", "president", "rett", "saal", "sætt", "sag",
-               "samm", "sid", "sidst", "skuld", "slag", "spørsmaal", "stat", "sted", "stemm", "still", "størr", "syn",
-               "tag", "tal", "tilfæld", "und", "uttal", "vær", "vedkomm", "vild", "virk")
+    words <- c(stopwords("nor"), "aar", "altsaa", "anden", "andet", "andre", "anledning","blev", "blive", "bliver",
+               "b[[:alpha:]]r", "burde", "derfor", "dog", "efter", "efterm",
+               "end", "faa", "faar", "f[[:alpha:]]rste", "frem", "gaa", "gaar", "ganske",
+               "gj[[:alpha:]]re", "gjort", "godt", "grund", "have", "hele", "heller", "hvad", "ind", "kann", "komme",
+               "kommer", "kunde", "led", "maa", "mener", "mere", "mig", "naar",
+               "ning", "nogen", "noget", "nok", "ogsaa", "ordet", "paa", "pr[[:alpha:]]sidenten",
+               "punkt", "saa", "saadan", "saaledes", "sagt", "sak", "ser", "side", "sig", "sige", "skulde",
+               "staar", "stor", "store", "st[[:alpha:]]rre", "synes", "tid", "tilf[[:alpha:]]lde", "ting", "tror",
+               "under", "v[[:alpha:]]ret", "vel", "vilde","all", "altsa", "and", "andr",
+               "ann", "bar", "bliv", "burd", "denn", "dett", "diss", "eft", "ell", "enkelt", "find", "f[[:alpha:]]lg",
+               "form", "f[[:alpha:]]rst", "gang", "gansk", "gj[[:alpha:]]r", "hadd", "hav", "hel", "hell", "hold", "ikk",
+               "ikkj", "ing", "komm", "kong", "kund", "kunn", "lig", "ligg", "mang", "mening", "mer",
+               "nog", "ogsa", "ord", "paragraf", "rett", "s[[:alpha:]]tt", "sag",
+               "sid", "sidst", "skuld", "slag", "sted", "still", "syn",
+               "tag", "tal", "tilf[[:alpha:]]ld", "und", "uttal", "v[[:alpha:]]r", "vild", "virk", "kap", "bifald", "bilfalt",
+               "post", "hev", "tit", "gj[[:alpha:]]r", "titel", "indstilling", "indst", "pct", "vert")
     words
 }
-
-

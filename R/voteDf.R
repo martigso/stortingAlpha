@@ -32,18 +32,20 @@ votedf<-function(pattern, txtvector, strlength = 200){
   else {
     require(gsubfn)
   }
+  require(stringi)
 
   preText <- unlist(as.list(unlist(strsplit(as.character(txtvector), pattern))))
-  nWordsTheme <- sapply(gregexpr("\\W+", preText[-length(preText)]), length) + 1
-  preText <- ifelse(nchar(preText)>15000, substring(preText, nchar(preText)-15000, nchar(preText)), preText)
-
+  nWordsTheme <- stri_count_words(preText[-length(preText)])
+  #preText <- ifelse(nchar(preText)>15000, substring(preText, nchar(preText)-15000, nchar(preText)), preText)
+    cat("Text split and word count complete...\n")
   postText <- unlist(substring(as.list(unlist(strsplit(as.character(txtvector), pattern)))[-1], 1, 2000))
 
   tempdf<-data.frame(cbind(vote=as.character(unlist(strapply(txtvector, pattern))),
                            themeText=as.character(preText[-length(preText)]),
                            voteText=as.character(postText),
                            nWordsTheme=as.numeric(nWordsTheme),
-                           totWords=as.numeric(sapply(gregexpr("\\W+", txtvector), length) + 1)))
+                           totWords=as.numeric(stri_count_words(txtvector))))
+    cat("Data frame ready")
 
   tempdf$enstem<-ifelse(grepl("enstemmig", tempdf$voteText)==TRUE | grepl("enst.", tempdf$voteText)==TRUE, 1, 0)
 
